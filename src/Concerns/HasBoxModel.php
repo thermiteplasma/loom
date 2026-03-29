@@ -1,20 +1,31 @@
-<?php 
+<?php
 
 namespace Thermiteplasma\Loom\Concerns;
 
 trait HasBoxModel
 {
     public ?string $width = null;
+
     public ?string $height = null;
+
     public ?string $minHeight = null;
+
     public ?string $maxHeight = null;
+
     public ?string $padding = null;
+
     public ?string $paddingTop = null;
+
     public ?string $paddingBottom = null;
+
     public ?string $paddingLeft = null;
+
     public ?string $paddingRight = null;
+
     public ?string $margin = null;
+
     public ?string $marginTop = null;
+
     public ?string $marginBottom = null;
 
     protected function boxModelStyles(): array

@@ -1,10 +1,10 @@
 <?php
 
-use Thermiteplasma\Loom\DataSources\QueryDataSource;
-use Thermiteplasma\Loom\Contracts\ReportDataSource;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Thermiteplasma\Loom\Contracts\ReportDataSource;
+use Thermiteplasma\Loom\DataSources\QueryDataSource;
 
 beforeEach(function () {
     Schema::create('query_ds_items', function ($table) {
@@ -24,8 +24,10 @@ afterEach(function () {
     Schema::dropIfExists('query_ds_items');
 });
 
-$model = new class extends Model {
+$model = new class extends Model
+{
     protected $table = 'query_ds_items';
+
     public $timestamps = false;
 };
 

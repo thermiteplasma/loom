@@ -2,9 +2,9 @@
 
 namespace Thermiteplasma\Loom\Components;
 
+use Closure;
 use Illuminate\Support\Collection;
 use Thermiteplasma\Loom\Contracts\ReportDataSource;
-use Closure;
 
 class DataList extends Band
 {

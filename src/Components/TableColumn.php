@@ -3,11 +3,14 @@
 namespace Thermiteplasma\Loom\Components;
 
 use Illuminate\View\Component;
-use Thermiteplasma\Loom\Concerns\{BuildsStyles, HasTypography, HasBackground, HasBorders};
+use Thermiteplasma\Loom\Concerns\BuildsStyles;
+use Thermiteplasma\Loom\Concerns\HasBackground;
+use Thermiteplasma\Loom\Concerns\HasBorders;
+use Thermiteplasma\Loom\Concerns\HasTypography;
 
 class TableColumn extends Component
 {
-    use BuildsStyles, HasTypography, HasBackground, HasBorders;
+    use BuildsStyles, HasBackground, HasBorders, HasTypography;
 
     public function __construct(
         public ?string $header = null,

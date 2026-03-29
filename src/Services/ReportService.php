@@ -2,10 +2,12 @@
 
 namespace Thermiteplasma\Loom\Services;
 
-use Thermiteplasma\Loom\Contracts\Exportable;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Illuminate\Support\Facades\View;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
+use Thermiteplasma\Loom\Contracts\Exportable;
 
 class ReportService
 {
@@ -56,7 +58,7 @@ class ReportService
         $process = new Process($command, null, null, $html, $this->timeout);
         $process->run();
 
-        if (!$process->isSuccessful()) {
+        if (! $process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
 
@@ -69,7 +71,7 @@ class ReportService
     public function pdf(string $view, array $data = [], ?string $filename = null, bool $download = false)
     {
         $pdf = $this->render($view, $data);
-        $filename ??= 'report-' . now()->format('Ymd-His') . '.pdf';
+        $filename ??= 'report-'.now()->format('Ymd-His').'.pdf';
         $disposition = $download ? 'attachment' : 'inline';
 
         return response($pdf, 200, [
@@ -85,10 +87,10 @@ class ReportService
     public function save(string $view, array $data = [], ?string $path = null): string
     {
         $pdf = $this->render($view, $data);
-        $path ??= config('loom.storage_path') . '/report-' . now()->format('Ymd-His') . '.pdf';
+        $path ??= config('loom.storage_path').'/report-'.now()->format('Ymd-His').'.pdf';
 
         $dir = dirname($path);
-        if (!is_dir($dir)) {
+        if (! is_dir($dir)) {
             mkdir($dir, 0755, true);
         }
 
@@ -105,12 +107,12 @@ class ReportService
     {
         $html = $this->html($view, $data);
 
-        $extractor = new ExcelExtractor();
+        $extractor = new ExcelExtractor;
         $spreadsheet = $extractor->fromHtml($html);
 
-        $filename ??= 'report-' . now()->format('Ymd-His') . '.xlsx';
+        $filename ??= 'report-'.now()->format('Ymd-His').'.xlsx';
 
-        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer = new Xlsx($spreadsheet);
 
         return response()->streamDownload(
             fn () => $writer->save('php://output'),
@@ -124,7 +126,7 @@ class ReportService
      */
     public function excelFromSheets(Exportable $report, ?string $filename = null)
     {
-        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $spreadsheet = new Spreadsheet;
         $spreadsheet->removeSheetByIndex(0);
 
         foreach ($report->sheets() as $index => $sheet) {
@@ -134,8 +136,8 @@ class ReportService
             // Headers
             $col = 'A';
             foreach ($sheet->headers as $header) {
-                $ws->setCellValue($col . '1', $header);
-                $ws->getStyle($col . '1')->getFont()->setBold(true);
+                $ws->setCellValue($col.'1', $header);
+                $ws->getStyle($col.'1')->getFont()->setBold(true);
                 $ws->getColumnDimension($col)->setAutoSize(true);
                 $col++;
             }
@@ -145,10 +147,10 @@ class ReportService
             foreach ($sheet->rows as $row) {
                 $col = 'A';
                 foreach ($row as $value) {
-                    $ws->setCellValue($col . $rowNum, $value);
+                    $ws->setCellValue($col.$rowNum, $value);
 
                     if (isset($sheet->columnFormats[$col])) {
-                        $ws->getStyle($col . $rowNum)
+                        $ws->getStyle($col.$rowNum)
                             ->getNumberFormat()
                             ->setFormatCode($sheet->columnFormats[$col]);
                     }
@@ -167,23 +169,23 @@ class ReportService
                 while ($col <= $maxCol) {
                     if (in_array($col, $sheet->totalColumns)) {
                         $ws->setCellValue(
-                            $col . $rowNum,
+                            $col.$rowNum,
                             "=SUM({$col}2:{$col}{$lastDataRow})"
                         );
                         if (isset($sheet->columnFormats[$col])) {
-                            $ws->getStyle($col . $rowNum)
+                            $ws->getStyle($col.$rowNum)
                                 ->getNumberFormat()
                                 ->setFormatCode($sheet->columnFormats[$col]);
                         }
                     }
-                    $ws->getStyle($col . $rowNum)->getFont()->setBold(true);
+                    $ws->getStyle($col.$rowNum)->getFont()->setBold(true);
                     $col++;
                 }
             }
         }
 
-        $filename ??= 'report-' . now()->format('Ymd-His') . '.xlsx';
-        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $filename ??= 'report-'.now()->format('Ymd-His').'.xlsx';
+        $writer = new Xlsx($spreadsheet);
 
         return response()->streamDownload(
             fn () => $writer->save('php://output'),

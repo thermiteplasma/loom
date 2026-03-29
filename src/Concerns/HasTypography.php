@@ -1,21 +1,33 @@
-<?php 
+<?php
 
 namespace Thermiteplasma\Loom\Concerns;
 
 trait HasTypography
 {
     public ?string $fontFamily = null;
+
     public ?string $fontSize = null;
+
     public ?string $color = null;
+
     public bool $bold = false;
+
     public bool $italic = false;
+
     public bool $underline = false;
+
     public bool $strikethrough = false;
+
     public ?string $align = null;
+
     public ?string $verticalAlign = null;
+
     public ?string $lineHeight = null;
+
     public ?string $letterSpacing = null;
+
     public ?string $textTransform = null;
+
     public ?string $whiteSpace = null;
 
     protected function typographyStyles(): array

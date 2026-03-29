@@ -2,10 +2,10 @@
 
 namespace Thermiteplasma\Loom\Components;
 
-use Illuminate\View\Component;
-use Illuminate\Support\Collection;
-use Thermiteplasma\Loom\Contracts\ReportDataSource;
 use Closure;
+use Illuminate\Support\Collection;
+use Illuminate\View\Component;
+use Thermiteplasma\Loom\Contracts\ReportDataSource;
 
 class Subreport extends Component
 {

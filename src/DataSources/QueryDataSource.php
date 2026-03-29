@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 namespace Thermiteplasma\Loom\DataSources;
 
-use Thermiteplasma\Loom\Contracts\ReportDataSource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Thermiteplasma\Loom\Contracts\ReportDataSource;
 
 class QueryDataSource implements ReportDataSource
 {

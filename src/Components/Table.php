@@ -3,7 +3,9 @@
 namespace Thermiteplasma\Loom\Components;
 
 use Illuminate\View\Component;
-use Thermiteplasma\Loom\Concerns\{BuildsStyles, HasBorders, HasTypography};
+use Thermiteplasma\Loom\Concerns\BuildsStyles;
+use Thermiteplasma\Loom\Concerns\HasBorders;
+use Thermiteplasma\Loom\Concerns\HasTypography;
 
 class Table extends Component
 {

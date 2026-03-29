@@ -3,7 +3,8 @@
 use Thermiteplasma\Loom\Concerns\BuildsStyles;
 
 beforeEach(function () {
-    $this->subject = new class {
+    $this->subject = new class
+    {
         use BuildsStyles;
 
         public function build(array $declarations): string
