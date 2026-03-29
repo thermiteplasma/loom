@@ -348,7 +348,9 @@ class ExcelExtractor
         $children = $xpath->query('./div', $container);
 
         foreach ($children as $child) {
-            if (!$child instanceof DOMElement) continue;
+            if (! $child instanceof DOMElement) {
+                continue;
+            }
             $style = $child->getAttribute('style');
             $columns[] = [
                 'label' => trim($child->textContent),
