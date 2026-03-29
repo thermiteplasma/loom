@@ -1,0 +1,1 @@
+<div style="{{ $styles() }}" {{ $attributes }}>{{ $slot }}</div>

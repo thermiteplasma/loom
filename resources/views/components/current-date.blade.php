@@ -1,0 +1,1 @@
+<span style="{{ $styles() }}" {{ $attributes }}>{{ now()->format($format) }}</span>

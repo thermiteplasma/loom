@@ -1,0 +1,1 @@
+<span class="total-pages" {{ $attributes }}></span>

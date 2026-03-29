@@ -1,0 +1,1 @@
+<div style="{{ $styles() }}" {{ $attributes }}></div>

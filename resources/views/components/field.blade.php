@@ -1,0 +1,1 @@
+<{{ $tag }} style="{{ $styles() }}" {{ $attributes }}>{{ $slot }}</{{ $tag }}>
