@@ -1,9 +1,11 @@
 <?php
 
-use Thermiteplasma\Loom\Concerns\{BuildsStyles, HasBorders};
+use Thermiteplasma\Loom\Concerns\BuildsStyles;
+use Thermiteplasma\Loom\Concerns\HasBorders;
 
 beforeEach(function () {
-    $this->subject = new class {
+    $this->subject = new class
+    {
         use BuildsStyles, HasBorders;
 
         public function borders(): array

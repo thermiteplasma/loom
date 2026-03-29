@@ -1,13 +1,15 @@
-<?php 
+<?php
 
 namespace Thermiteplasma\Loom\Contracts;
+
+use Thermiteplasma\Loom\Support\ReportSheet;
 
 interface Exportable
 {
     /**
      * Return an array of ReportSheet definitions for Excel export.
      *
-     * @return \Thermiteplasma\Loom\Support\ReportSheet[]
+     * @return ReportSheet[]
      */
     public function sheets(): array;
 }

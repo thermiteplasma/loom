@@ -29,9 +29,10 @@ class Report extends Component
     public function pageSize(): string
     {
         $size = $this->size;
-        if ($this->orientation === 'landscape' && !str_contains($size, 'landscape')) {
+        if ($this->orientation === 'landscape' && ! str_contains($size, 'landscape')) {
             $size .= ' landscape';
         }
+
         return $size;
     }
 
@@ -45,6 +46,7 @@ class Report extends Component
                 $this->marginLeft ?? $this->margin,
             ])->implode(' ');
         }
+
         return $this->margin;
     }
 

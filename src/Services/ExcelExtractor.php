@@ -3,30 +3,37 @@
 namespace Thermiteplasma\Loom\Services;
 
 use DOMDocument;
-use DOMXPath;
 use DOMElement;
+use DOMXPath;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class ExcelExtractor
 {
     protected Spreadsheet $spreadsheet;
+
     protected int $currentRow = 1;
+
     protected int $sheetIndex = 0;
+
     protected ?Worksheet $currentSheet = null;
+
     protected array $headers = [];
+
     protected ?int $dataStartRow = null;
 
     public function __construct()
     {
-        $this->spreadsheet = new Spreadsheet();
+        $this->spreadsheet = new Spreadsheet;
         $this->spreadsheet->removeSheetByIndex(0);
     }
 
     public function fromHtml(string $html): Spreadsheet
     {
-        $doc = new DOMDocument();
+        $doc = new DOMDocument;
         @$doc->loadHTML(
             mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'),
             LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
@@ -36,7 +43,9 @@ class ExcelExtractor
         $bands = $xpath->query('//*[contains(@class, "band")]');
 
         foreach ($bands as $band) {
-            if (!$band instanceof DOMElement) continue;
+            if (! $band instanceof DOMElement) {
+                continue;
+            }
 
             $classes = $band->getAttribute('class');
             $this->processBand($classes, $band, $xpath);
@@ -50,36 +59,42 @@ class ExcelExtractor
         // Title → first sheet, header area
         if (str_contains($classes, 'band-title')) {
             $this->processTitleBand($band, $xpath);
+
             return;
         }
 
         // Group header → new sheet
         if (str_contains($classes, 'band-groupHeader')) {
             $this->processGroupHeader($band);
+
             return;
         }
 
         // Column header → header row
         if (str_contains($classes, 'band-columnHeader')) {
             $this->processColumnHeader($band, $xpath);
+
             return;
         }
 
         // Detail → data row
         if (str_contains($classes, 'band-detail')) {
             $this->processDetailRow($band, $xpath);
+
             return;
         }
 
         // Group footer → subtotal row with SUM formulas
         if (str_contains($classes, 'band-groupFooter')) {
             $this->processGroupFooter($band, $xpath);
+
             return;
         }
 
         // Summary → summary sheet
         if (str_contains($classes, 'band-summary')) {
             $this->processSummary($band, $xpath);
+
             return;
         }
 
@@ -122,19 +137,19 @@ class ExcelExtractor
                     }
                 }
 
-                $sheet->setCellValue($col . $kpiRow, $labelText);
-                $sheet->getStyle($col . $kpiRow)->getFont()->setBold(true);
+                $sheet->setCellValue($col.$kpiRow, $labelText);
+                $sheet->getStyle($col.$kpiRow)->getFont()->setBold(true);
 
                 $numeric = $this->parseNumeric($valueText);
                 if ($numeric) {
-                    $sheet->setCellValue($col . ($kpiRow + 1), $numeric['value']);
+                    $sheet->setCellValue($col.($kpiRow + 1), $numeric['value']);
                     if ($numeric['format']) {
-                        $sheet->getStyle($col . ($kpiRow + 1))
+                        $sheet->getStyle($col.($kpiRow + 1))
                             ->getNumberFormat()
                             ->setFormatCode($numeric['format']);
                     }
                 } else {
-                    $sheet->setCellValue($col . ($kpiRow + 1), $valueText);
+                    $sheet->setCellValue($col.($kpiRow + 1), $valueText);
                 }
 
                 $col++;
@@ -161,7 +176,7 @@ class ExcelExtractor
 
     protected function processColumnHeader(DOMElement $band, DOMXPath $xpath): void
     {
-        if (!$this->currentSheet) {
+        if (! $this->currentSheet) {
             $this->currentSheet = $this->addSheet('Data');
             $this->currentRow = 1;
         }
@@ -170,19 +185,19 @@ class ExcelExtractor
 
         $col = 'A';
         foreach ($this->headers as $header) {
-            $cell = $col . $this->currentRow;
+            $cell = $col.$this->currentRow;
             $this->currentSheet->setCellValue($cell, $header['label']);
             $this->currentSheet->getStyle($cell)->getFont()->setBold(true);
             $this->currentSheet->getStyle($cell)->getFill()
-                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->setFillType(Fill::FILL_SOLID)
                 ->getStartColor()->setRGB('E8EEF3');
 
             if ($header['align'] === 'right') {
-                $this->currentSheet->getStyle($col . '1:' . $col . '9999')
+                $this->currentSheet->getStyle($col.'1:'.$col.'9999')
                     ->getAlignment()
                     ->setHorizontal(Alignment::HORIZONTAL_RIGHT);
             } elseif ($header['align'] === 'center') {
-                $this->currentSheet->getStyle($col . '1:' . $col . '9999')
+                $this->currentSheet->getStyle($col.'1:'.$col.'9999')
                     ->getAlignment()
                     ->setHorizontal(Alignment::HORIZONTAL_CENTER);
             }
@@ -203,9 +218,11 @@ class ExcelExtractor
 
     protected function processDetailRow(DOMElement $band, DOMXPath $xpath): void
     {
-        if (!$this->currentSheet) return;
+        if (! $this->currentSheet) {
+            return;
+        }
 
-        if (!$this->dataStartRow) {
+        if (! $this->dataStartRow) {
             $this->dataStartRow = $this->currentRow;
         }
 
@@ -213,7 +230,7 @@ class ExcelExtractor
         $col = 'A';
 
         foreach ($values as $value) {
-            $cell = $col . $this->currentRow;
+            $cell = $col.$this->currentRow;
             $numeric = $this->parseNumeric($value);
 
             if ($numeric !== null) {
@@ -235,7 +252,7 @@ class ExcelExtractor
             $maxCol = chr(ord('A') + max(count($values) - 1, 0));
             $this->currentSheet->getStyle("A{$this->currentRow}:{$maxCol}{$this->currentRow}")
                 ->getFill()
-                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->setFillType(Fill::FILL_SOLID)
                 ->getStartColor()->setRGB('FAFAFA');
         }
 
@@ -244,14 +261,16 @@ class ExcelExtractor
 
     protected function processGroupFooter(DOMElement $band, DOMXPath $xpath): void
     {
-        if (!$this->currentSheet || !$this->dataStartRow) return;
+        if (! $this->currentSheet || ! $this->dataStartRow) {
+            return;
+        }
 
         $values = $this->extractCellValues($band, $xpath);
         $col = 'A';
         $lastDataRow = $this->currentRow - 1;
 
         foreach ($values as $value) {
-            $cell = $col . $this->currentRow;
+            $cell = $col.$this->currentRow;
             $numeric = $this->parseNumeric($value);
 
             // Insert SUM formula for numeric columns
@@ -277,7 +296,7 @@ class ExcelExtractor
         $maxCol = chr(ord('A') + max(count($values) - 1, 0));
         $this->currentSheet->getStyle("A{$this->currentRow}:{$maxCol}{$this->currentRow}")
             ->getBorders()->getTop()
-            ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            ->setBorderStyle(Border::BORDER_THIN);
 
         $this->currentRow++;
         $this->dataStartRow = null; // reset for next group within same sheet
@@ -297,7 +316,7 @@ class ExcelExtractor
         $values = $this->extractCellValues($band, $xpath);
         $col = 'B';
         foreach ($values as $value) {
-            $cell = $col . $row;
+            $cell = $col.$row;
             $numeric = $this->parseNumeric($value);
             if ($numeric) {
                 $sheet->setCellValue($cell, $numeric['value']);
@@ -357,7 +376,9 @@ class ExcelExtractor
                 $parts = [];
                 foreach ($spans as $span) {
                     $text = trim($span->textContent);
-                    if ($text !== '') $parts[] = $text;
+                    if ($text !== '') {
+                        $parts[] = $text;
+                    }
                 }
                 $values[] = implode(' ', $parts);
             } else {
@@ -409,8 +430,13 @@ class ExcelExtractor
 
     protected function extractAlign(string $style): string
     {
-        if (str_contains($style, 'text-align: right')) return 'right';
-        if (str_contains($style, 'text-align: center')) return 'center';
+        if (str_contains($style, 'text-align: right')) {
+            return 'right';
+        }
+        if (str_contains($style, 'text-align: center')) {
+            return 'center';
+        }
+
         return 'left';
     }
 
@@ -419,6 +445,7 @@ class ExcelExtractor
         if (preg_match('/flex:\s*(\d+)/', $style, $m)) {
             return $m[1];
         }
+
         return null;
     }
 
@@ -437,11 +464,12 @@ class ExcelExtractor
         $original = $name;
         $counter = 1;
         while (in_array($name, $existing)) {
-            $name = substr($original, 0, 28) . ' (' . $counter++ . ')';
+            $name = substr($original, 0, 28).' ('.$counter++.')';
         }
 
         $sheet = $this->spreadsheet->createSheet($this->sheetIndex++);
         $sheet->setTitle($name);
+
         return $sheet;
     }
 
@@ -453,6 +481,7 @@ class ExcelExtractor
                 return $this->spreadsheet->getSheet($i);
             }
         }
+
         return $this->addSheet($name);
     }
 }

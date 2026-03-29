@@ -1,9 +1,9 @@
-<?php 
+<?php
 
 namespace Thermiteplasma\Loom\DataSources;
 
-use Thermiteplasma\Loom\Contracts\ReportDataSource;
 use Illuminate\Support\Collection;
+use Thermiteplasma\Loom\Contracts\ReportDataSource;
 
 class CollectionDataSource implements ReportDataSource
 {

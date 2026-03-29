@@ -1,9 +1,11 @@
 <?php
 
-use Thermiteplasma\Loom\Concerns\{BuildsStyles, HasTypography};
+use Thermiteplasma\Loom\Concerns\BuildsStyles;
+use Thermiteplasma\Loom\Concerns\HasTypography;
 
 beforeEach(function () {
-    $this->subject = new class {
+    $this->subject = new class
+    {
         use BuildsStyles, HasTypography;
 
         public function typography(): array

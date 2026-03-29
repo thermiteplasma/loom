@@ -3,13 +3,16 @@
 namespace Thermiteplasma\Loom\Components;
 
 use Illuminate\View\Component;
-use Thermiteplasma\Loom\Concerns\{
-    BuildsStyles, HasBoxModel, HasTypography, HasBorders, HasBackground, HasVisibility
-};
+use Thermiteplasma\Loom\Concerns\BuildsStyles;
+use Thermiteplasma\Loom\Concerns\HasBackground;
+use Thermiteplasma\Loom\Concerns\HasBorders;
+use Thermiteplasma\Loom\Concerns\HasBoxModel;
+use Thermiteplasma\Loom\Concerns\HasTypography;
+use Thermiteplasma\Loom\Concerns\HasVisibility;
 
 class Band extends Component
 {
-    use BuildsStyles, HasBoxModel, HasTypography, HasBorders, HasBackground, HasVisibility;
+    use BuildsStyles, HasBackground, HasBorders, HasBoxModel, HasTypography, HasVisibility;
 
     public function __construct(
         public string $bandType = 'detail',

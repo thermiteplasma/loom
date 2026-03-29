@@ -9,7 +9,7 @@ class LoomServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/loom.php', 'loom');
+        $this->mergeConfigFrom(__DIR__.'/../config/loom.php', 'loom');
 
         $this->app->singleton(ReportService::class, function ($app) {
             return new ReportService(
@@ -24,7 +24,7 @@ class LoomServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'loom');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'loom');
 
         $this->loadViewComponentsAs('loom', [
             // Main
@@ -68,11 +68,11 @@ class LoomServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/loom.php' => config_path('loom.php'),
+                __DIR__.'/../config/loom.php' => config_path('loom.php'),
             ], 'loom-config');
 
             $this->publishes([
-                __DIR__ . '/../resources/views' => resource_path('views/vendor/loom'),
+                __DIR__.'/../resources/views' => resource_path('views/vendor/loom'),
             ], 'loom-views');
         }
     }

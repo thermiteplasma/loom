@@ -3,11 +3,15 @@
 namespace Thermiteplasma\Loom\Components;
 
 use Illuminate\View\Component;
-use Thermiteplasma\Loom\Concerns\{BuildsStyles, HasBoxModel, HasTypography, HasBorders, HasBackground};
+use Thermiteplasma\Loom\Concerns\BuildsStyles;
+use Thermiteplasma\Loom\Concerns\HasBackground;
+use Thermiteplasma\Loom\Concerns\HasBorders;
+use Thermiteplasma\Loom\Concerns\HasBoxModel;
+use Thermiteplasma\Loom\Concerns\HasTypography;
 
 class Field extends Component
 {
-    use BuildsStyles, HasBoxModel, HasTypography, HasBorders, HasBackground;
+    use BuildsStyles, HasBackground, HasBorders, HasBoxModel, HasTypography;
 
     public function __construct(
         ?string $width = null,

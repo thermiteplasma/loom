@@ -1,7 +1,7 @@
 <?php
 
-use Thermiteplasma\Loom\DataSources\CallbackDataSource;
 use Illuminate\Support\Collection;
+use Thermiteplasma\Loom\DataSources\CallbackDataSource;
 
 it('invokes the callback and returns its result', function () {
     $source = new CallbackDataSource(fn () => collect([1, 2, 3]));
@@ -14,6 +14,7 @@ it('passes params to the callback', function () {
 
     $source = new CallbackDataSource(function (array $params) use (&$received) {
         $received = $params;
+
         return collect();
     });
 

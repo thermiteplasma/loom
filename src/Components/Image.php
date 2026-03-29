@@ -3,7 +3,8 @@
 namespace Thermiteplasma\Loom\Components;
 
 use Illuminate\View\Component;
-use Thermiteplasma\Loom\Concerns\{BuildsStyles, HasBorders};
+use Thermiteplasma\Loom\Concerns\BuildsStyles;
+use Thermiteplasma\Loom\Concerns\HasBorders;
 
 class Image extends Component
 {

@@ -3,7 +3,8 @@
 namespace Thermiteplasma\Loom\Components;
 
 use Illuminate\View\Component;
-use Thermiteplasma\Loom\Concerns\{BuildsStyles, HasTypography};
+use Thermiteplasma\Loom\Concerns\BuildsStyles;
+use Thermiteplasma\Loom\Concerns\HasTypography;
 
 class PageNumber extends Component
 {
