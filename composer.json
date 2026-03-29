@@ -46,7 +46,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Thermiteplasma\\Loom\\Tests\\": "tests/",
+            "Thermiteplasma\\Loom\\Tests\\": "tests/"
         }
     },
     "scripts": {
