@@ -92,7 +92,7 @@ class ExcelExtractor
         $sheet = $this->ensureSheet('Summary');
 
         $sheet->setCellValue('A1', trim(
-            $xpath->query('.//h1', $band)->item(0)?->textContent ?? 'Report'
+            $xpath->query('.//h1', $band)->item(0)->textContent ?? 'Report'
         ));
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
 
@@ -147,7 +147,7 @@ class ExcelExtractor
         $groupName = trim($band->textContent);
         // Clean up: take just the first meaningful line
         $groupName = preg_replace('/\s+/', ' ', $groupName);
-        $groupName = explode('  ', $groupName)[0] ?? $groupName;
+        $groupName = explode('  ', $groupName)[0];
 
         $this->currentSheet = $this->addSheet($groupName);
         $this->currentRow = 1;
@@ -329,6 +329,7 @@ class ExcelExtractor
         $children = $xpath->query('./div', $container);
 
         foreach ($children as $child) {
+            if (!$child instanceof DOMElement) continue;
             $style = $child->getAttribute('style');
             $columns[] = [
                 'label' => trim($child->textContent),
