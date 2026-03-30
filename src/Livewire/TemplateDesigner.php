@@ -11,10 +11,10 @@ class TemplateDesigner extends Component
     // Report-level settings
     // -------------------------------------------------------------------------
     public array $reportProps = [
-        'size'        => 'A4',
+        'size' => 'A4',
         'orientation' => 'portrait',
-        'margin'      => '10mm',
-        'fontFamily'  => null,
+        'margin' => '10mm',
+        'fontFamily' => null,
     ];
 
     // -------------------------------------------------------------------------
@@ -26,7 +26,9 @@ class TemplateDesigner extends Component
     // Selection state
     // -------------------------------------------------------------------------
     public ?int $selectedBandIndex = null;
+
     public ?int $selectedElementIndex = null;
+
     public string $selectedType = ''; // 'band' | 'element'
 
     // -------------------------------------------------------------------------
@@ -39,6 +41,7 @@ class TemplateDesigner extends Component
     // Output
     // -------------------------------------------------------------------------
     public string $generatedCode = '';
+
     public bool $showCode = false;
 
     // =========================================================================
@@ -56,26 +59,26 @@ class TemplateDesigner extends Component
 
     public function selectBand(int $bandIndex): void
     {
-        $this->selectedBandIndex    = $bandIndex;
+        $this->selectedBandIndex = $bandIndex;
         $this->selectedElementIndex = null;
-        $this->selectedType         = 'band';
-        $this->editingProps         = $this->bands[$bandIndex]['props'];
+        $this->selectedType = 'band';
+        $this->editingProps = $this->bands[$bandIndex]['props'];
     }
 
     public function selectElement(int $bandIndex, int $elementIndex): void
     {
-        $this->selectedBandIndex    = $bandIndex;
+        $this->selectedBandIndex = $bandIndex;
         $this->selectedElementIndex = $elementIndex;
-        $this->selectedType         = 'element';
-        $this->editingProps         = $this->bands[$bandIndex]['elements'][$elementIndex]['props'];
+        $this->selectedType = 'element';
+        $this->editingProps = $this->bands[$bandIndex]['elements'][$elementIndex]['props'];
     }
 
     public function deselect(): void
     {
-        $this->selectedBandIndex    = null;
+        $this->selectedBandIndex = null;
         $this->selectedElementIndex = null;
-        $this->selectedType         = '';
-        $this->editingProps         = [];
+        $this->selectedType = '';
+        $this->editingProps = [];
     }
 
     // =========================================================================
@@ -105,8 +108,8 @@ class TemplateDesigner extends Component
     public function addElement(int $bandIndex, string $type): void
     {
         $element = [
-            'id'    => uniqid('el_'),
-            'type'  => $type,
+            'id' => uniqid('el_'),
+            'type' => $type,
             'props' => $this->defaultPropsFor($type),
         ];
 
@@ -193,13 +196,14 @@ class TemplateDesigner extends Component
                 continue;
             }
 
-            $tag       = 'x-loom-' . $band['type'];
+            $tag = 'x-loom-'.$band['type'];
             $bandAttrs = $this->renderProps($band['props'], bandLevel: true);
-            $open      = $bandAttrs ? "<{$tag} {$bandAttrs}>" : "<{$tag}>";
+            $open = $bandAttrs ? "<{$tag} {$bandAttrs}>" : "<{$tag}>";
 
             if (! $hasElements) {
                 $lines[] = "    {$open}</{$tag}>";
                 $lines[] = '';
+
                 continue;
             }
 
@@ -216,7 +220,7 @@ class TemplateDesigner extends Component
         $lines[] = '</x-loom-report>';
 
         $this->generatedCode = implode("\n", $lines);
-        $this->showCode      = true;
+        $this->showCode = true;
     }
 
     public function closeCode(): void
@@ -230,8 +234,8 @@ class TemplateDesigner extends Component
 
     private function renderElement(array $element, int $indent): string
     {
-        $pad  = str_repeat(' ', $indent);
-        $tag  = 'x-loom-' . $element['type'];
+        $pad = str_repeat(' ', $indent);
+        $tag = 'x-loom-'.$element['type'];
         $props = $element['props'];
 
         // Content goes in the slot, not as an attribute
@@ -239,7 +243,7 @@ class TemplateDesigner extends Component
         unset($props['content']);
 
         $attrs = $this->renderProps($props, bandLevel: false);
-        $open  = $attrs ? "<{$tag} {$attrs}>" : "<{$tag}>";
+        $open = $attrs ? "<{$tag} {$attrs}>" : "<{$tag}>";
 
         if ($content !== '') {
             return "{$pad}{$open}{$content}</{$tag}>";
@@ -259,6 +263,7 @@ class TemplateDesigner extends Component
 
             if ($value === true) {
                 $parts[] = $key; // bare boolean attribute
+
                 continue;
             }
 
@@ -289,16 +294,16 @@ class TemplateDesigner extends Component
     private function makeBand(string $type, string $label): array
     {
         return [
-            'type'      => $type,
-            'label'     => $label,
+            'type' => $type,
+            'label' => $label,
             'collapsed' => false,
-            'props'     => [
-                'background'    => null,
-                'padding'       => null,
-                'borderBottom'  => false,
-                'borderTop'     => false,
-                'borderColor'   => null,
-                'minHeight'     => null,
+            'props' => [
+                'background' => null,
+                'padding' => null,
+                'borderBottom' => false,
+                'borderTop' => false,
+                'borderColor' => null,
+                'minHeight' => null,
             ],
             'elements' => [],
         ];
@@ -307,94 +312,94 @@ class TemplateDesigner extends Component
     private function defaultPropsFor(string $type): array
     {
         $base = [
-            'content'       => '',
+            'content' => '',
             // Typography
-            'fontFamily'    => null,
-            'fontSize'      => null,
-            'color'         => null,
-            'bold'          => false,
-            'italic'        => false,
-            'underline'     => false,
+            'fontFamily' => null,
+            'fontSize' => null,
+            'color' => null,
+            'bold' => false,
+            'italic' => false,
+            'underline' => false,
             'strikethrough' => false,
-            'align'         => null,
+            'align' => null,
             'verticalAlign' => null,
-            'lineHeight'    => null,
+            'lineHeight' => null,
             'textTransform' => null,
             // Box model
-            'width'         => null,
-            'height'        => null,
-            'padding'       => null,
-            'margin'        => null,
+            'width' => null,
+            'height' => null,
+            'padding' => null,
+            'margin' => null,
             // Borders
-            'border'        => false,
-            'borderTop'     => false,
-            'borderBottom'  => false,
-            'borderLeft'    => false,
-            'borderRight'   => false,
-            'borderStyle'   => null,
-            'borderWidth'   => null,
-            'borderColor'   => null,
-            'borderRadius'  => null,
+            'border' => false,
+            'borderTop' => false,
+            'borderBottom' => false,
+            'borderLeft' => false,
+            'borderRight' => false,
+            'borderStyle' => null,
+            'borderWidth' => null,
+            'borderColor' => null,
+            'borderRadius' => null,
             // Background
-            'background'    => null,
-            'opacity'       => null,
+            'background' => null,
+            'opacity' => null,
         ];
 
         return match ($type) {
             'static-text' => array_merge($base, ['content' => 'Label']),
-            'field'       => array_merge($base, ['content' => '$record->field']),
+            'field' => array_merge($base, ['content' => '$record->field']),
             'page-number' => ['showTotal' => false],
             'total-pages' => [],
             'current-date' => ['format' => null],
-            'line'        => ['width' => '100%', 'borderBottom' => true, 'borderColor' => '#cccccc'],
-            'rectangle'   => array_merge($base, ['width' => '20mm', 'height' => '10mm', 'background' => '#e0e0e0']),
-            'image'       => ['src' => '', 'width' => '30mm', 'height' => '20mm', 'alt' => ''],
-            'row'         => ['justify' => null, 'items' => null, 'gap' => null],
-            'column'      => array_merge($base, ['flex' => null]),
-            'frame'       => array_merge($base, []),
-            default       => $base,
+            'line' => ['width' => '100%', 'borderBottom' => true, 'borderColor' => '#cccccc'],
+            'rectangle' => array_merge($base, ['width' => '20mm', 'height' => '10mm', 'background' => '#e0e0e0']),
+            'image' => ['src' => '', 'width' => '30mm', 'height' => '20mm', 'alt' => ''],
+            'row' => ['justify' => null, 'items' => null, 'gap' => null],
+            'column' => array_merge($base, ['flex' => null]),
+            'frame' => array_merge($base, []),
+            default => $base,
         };
     }
 
     public function elementLabel(string $type): string
     {
         return match ($type) {
-            'static-text'  => 'Static Text',
-            'field'        => 'Field',
-            'page-number'  => 'Page Number',
-            'total-pages'  => 'Total Pages',
+            'static-text' => 'Static Text',
+            'field' => 'Field',
+            'page-number' => 'Page Number',
+            'total-pages' => 'Total Pages',
             'current-date' => 'Current Date',
-            'line'         => 'Line',
-            'rectangle'    => 'Rectangle',
-            'ellipse'      => 'Ellipse',
-            'image'        => 'Image',
-            'row'          => 'Row',
-            'column'       => 'Column',
-            'frame'        => 'Frame',
-            'table'        => 'Table',
-            'subreport'    => 'Subreport',
-            'data-list'    => 'Data List',
-            default        => Str::title(str_replace('-', ' ', $type)),
+            'line' => 'Line',
+            'rectangle' => 'Rectangle',
+            'ellipse' => 'Ellipse',
+            'image' => 'Image',
+            'row' => 'Row',
+            'column' => 'Column',
+            'frame' => 'Frame',
+            'table' => 'Table',
+            'subreport' => 'Subreport',
+            'data-list' => 'Data List',
+            default => Str::title(str_replace('-', ' ', $type)),
         };
     }
 
     public function elementIcon(string $type): string
     {
         return match ($type) {
-            'static-text'  => 'T',
-            'field'        => '{}',
-            'page-number'  => '#',
-            'total-pages'  => '##',
+            'static-text' => 'T',
+            'field' => '{}',
+            'page-number' => '#',
+            'total-pages' => '##',
             'current-date' => '📅',
-            'line'         => '—',
-            'rectangle'    => '▭',
-            'ellipse'      => '◯',
-            'image'        => '🖼',
-            'row'          => '☰',
-            'column'       => '▏',
-            'frame'        => '⬜',
-            'table'        => '⊞',
-            default        => '·',
+            'line' => '—',
+            'rectangle' => '▭',
+            'ellipse' => '◯',
+            'image' => '🖼',
+            'row' => '☰',
+            'column' => '▏',
+            'frame' => '⬜',
+            'table' => '⊞',
+            default => '·',
         };
     }
 

@@ -3,8 +3,10 @@
 namespace Thermiteplasma\Loom;
 
 use Illuminate\Support\ServiceProvider;
-use Thermiteplasma\Loom\Services\ReportService;
+use Livewire\Component;
+use Livewire\Livewire;
 use Thermiteplasma\Loom\Livewire\TemplateDesigner;
+use Thermiteplasma\Loom\Services\ReportService;
 
 class LoomServiceProvider extends ServiceProvider
 {
@@ -68,8 +70,8 @@ class LoomServiceProvider extends ServiceProvider
         ]);
 
         // Designer UI — only registered when Livewire is installed
-        if (class_exists(\Livewire\Component::class)) {
-            \Livewire\Livewire::component('loom-template-designer', TemplateDesigner::class);
+        if (class_exists(Component::class)) {
+            Livewire::component('loom-template-designer', TemplateDesigner::class);
             $this->loadRoutesFrom(__DIR__.'/../routes/designer.php');
         }
 
