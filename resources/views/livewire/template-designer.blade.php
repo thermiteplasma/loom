@@ -41,7 +41,7 @@
                     <div
                         draggable="true"
                         class="flex items-center gap-2 px-2 py-1 rounded text-xs text-gray-200 bg-gray-700 hover:bg-indigo-600 cursor-grab transition-colors duration-100"
-                        x-on:dragstart="$dispatch('loom:palette-drag', { type: '{{ $item['type'] }}' })"
+                        x-on:dragstart="$event.dataTransfer.setData('text/plain', '{{ $item['type'] }}'); $dispatch('loom:palette-drag', { type: '{{ $item['type'] }}' })"
                         x-on:dragend="$dispatch('loom:palette-dragend')"
                         title="Drag to a band"
                     >
