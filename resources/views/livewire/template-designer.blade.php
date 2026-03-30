@@ -81,7 +81,7 @@
                         e.preventDefault();
                         this.dragOver = false;
                         const type = e.dataTransfer?.getData('text/plain') ?? null;
-                        if (type) $wire.addElement({{ $bandIndex }}, type);
+                        if (type) this.$wire.addElement({{ $bandIndex }}, type);
                     }
                 }"
             >
