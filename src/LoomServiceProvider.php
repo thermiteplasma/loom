@@ -4,6 +4,7 @@ namespace Thermiteplasma\Loom;
 
 use Illuminate\Support\ServiceProvider;
 use Thermiteplasma\Loom\Services\ReportService;
+use Thermiteplasma\Loom\Livewire\TemplateDesigner;
 
 class LoomServiceProvider extends ServiceProvider
 {
@@ -64,6 +65,22 @@ class LoomServiceProvider extends ServiceProvider
             Components\TotalPages::class,
             Components\CurrentDate::class,
             Components\Style::class,
+        ]);
+
+        // Designer UI — only registered when Livewire is installed
+        if (class_exists(\Livewire\Component::class)) {
+            \Livewire\Livewire::component('loom-template-designer', TemplateDesigner::class);
+            $this->loadRoutesFrom(__DIR__.'/../routes/designer.php');
+        }
+
+        // Register designer Blade components under the loom:: namespace
+        $this->loadViewComponentsAs('loom-designer', [
+            Components\Designer\PropSection::class,
+            Components\Designer\Text::class,
+            Components\Designer\Textarea::class,
+            Components\Designer\Select::class,
+            Components\Designer\Checkbox::class,
+            Components\Designer\Color::class,
         ]);
 
         if ($this->app->runningInConsole()) {
