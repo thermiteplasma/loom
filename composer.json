@@ -31,7 +31,7 @@
         "pestphp/pest": "^4.0",
         "pestphp/pest-plugin-arch": "^4.0",
         "pestphp/pest-plugin-laravel": "^4.0",
-        "phpoffice/phpspreadsheet": "^2.0",
+        "phpoffice/phpspreadsheet": "^5.8",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan-deprecation-rules": "^2.0",
         "phpstan/phpstan-phpunit": "^2.0",
